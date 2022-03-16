@@ -1,0 +1,23 @@
+.page-bar1 a{
+    border: 1px solid #ddd;
+    text-decoration: none;
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    cursor: pointer
+}
+.page-bar1 a:hover{
+    background-color: #eee;
+}
+.page-bar1 a.banclick{
+    cursor:not-allowed;
+}
+.page-bar1 .active a{
+    color: #fff;
+    cursor: default;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}

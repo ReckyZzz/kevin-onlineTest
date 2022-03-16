@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kevin.onlinetest.mapper.AdminMapper">
+    <select id="get" resultType="com.kevin.onlinetest.pojo.Admin">
+        select * from admin where id = #{id}
+    </select>
+    <select id="list" resultType="com.kevin.onlinetest.pojo.Admin">
+        select * from admin
+    </select>
+    <select id="getAdminByAccount" resultType="com.kevin.onlinetest.pojo.Admin">
+        select * from admin where account = #{account}
+    </select>
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into admin (account, password) values (#{account}, #{password})
+    </insert>
+    <update id="update">
+        update admin set account = #{account}, password = #{password} where id = #{id}
+    </update>
+    <delete id="delete">
+        delete from admin where id = #{id}
+    </delete>
+</mapper>

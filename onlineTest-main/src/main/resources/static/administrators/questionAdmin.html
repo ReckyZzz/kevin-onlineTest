@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>管理员问题管理</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/administrators/index.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+</head>
+<body>
+<div id="adminQuestion" style="width: 100%;height: 100%">
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">在线练习系统</a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="搜索" aria-label="Search" id="searcher">
+        <ul class="navbar-nav px-3" style="background-color: black">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#" @click="searchQuestion">搜索</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav px-3" style="background-color: crimson">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#" @click="logout">登出</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="sidebar-sticky pt-3">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>人员管理</span>
+                        <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
+                        <!--                        <span data-feather="plus-circle"></span>-->
+                        <!--                    </a>-->
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a id="questionPage" class="nav-link" href="index.html">
+                                <span data-feather="book"></span>
+                                教师管理
+                            </a>
+                        </li>
+                        <li class="nav-item" >
+                            <a id="anPage" class="nav-link" href="studentAdmin.html">
+                                <span data-feather="feather"></span>
+                                学生管理
+                            </a>
+                        </li>
+                    </ul>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>问题管理</span>
+                        <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
+                        <!--                        <span data-feather="plus-circle"></span>-->
+                        <!--                    </a>-->
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span data-feather="check-circle"></span>
+                                问题管理
+                            </a>
+                        </li>
+                    </ul>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>科目管理</span>
+                        <!--                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">-->
+                        <!--                        <span data-feather="plus-circle"></span>-->
+                        <!--                    </a>-->
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="courseAdmin.html">
+                                <span data-feather="users"></span>
+                                科目管理
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">问题管理</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group mr-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="getPageQuestion(1,15)">总览</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="isBatch=!isBatch">批量操作</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h2>问题列表</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead align="center">
+                        <tr v-show="isBatch">
+                            <th>
+                                全选
+                                <svg class="bi bi-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" @click="curAll=true;chooseAll(0)" v-if="!curAll">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                </svg>
+                                <svg class="bi bi-check-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" @click="curAll=false;chooseAll(1)" v-if="curAll">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                    <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                                </svg>
+                            </th>
+                            <th>
+                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer" v-if="ifDeal()">删除</button>&nbsp;&nbsp;&nbsp;&nbsp
+                            </th>
+                            <th>
+                                <button class="btn btn-primary btn-sm" data-toggle="modal" @click="isBatch=!isBatch">退出</button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th v-if="isBatch">选择</th>
+                            <th>问题ID</th>
+                            <th>科目</th>
+                            <th>问题类型</th>
+                            <th>教师ID</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody align="center">
+                        <tr v-for="(QuestionInfo,i) in QuestionInfoList">
+                            <td v-if="isBatch">
+                                <svg class="bi bi-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" v-if="!isDeal[i]" @click="now=QuestionInfo.id;Vue.set(isDeal,i,1);isAll();outDeal()">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                </svg>
+                                <svg class="bi bi-check-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" v-if="isDeal[i]" @click="now=QuestionInfo.id;Vue.set(isDeal,i,0);curAll=false;isAll();outDeal()">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                    <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                                </svg>
+                            </td>
+                            <td>{{QuestionInfo.id}}</td>
+                            <td>{{QuestionInfo.course.name}}</td>
+                            <td>{{QuestionInfo.type.name}}</td>
+                            <td>{{QuestionInfo.teacherId}}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" data-toggle="modal" onclick="displayWindow()" @click="QuestionNow=i;teacherNow=QuestionInfo.teacherId;check(teacherNow)">查看</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#layer" @click="now=QuestionInfo.id;Vue.set(isDeal,i,1)">删除</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="page-bar">
+                        <ul>
+                            <li v-if="cur>1"><a v-on:click="cur=1,pageClick(),subArr()">首页</a></li>
+                            <li v-if="cur==1"><a class="banclick">首页</a></li>
+                            <li v-if="cur>1"><a v-on:click="cur--,pageClick(),subArr()">上一页</a></li>
+                            <li v-if="cur==1"><a class="banclick">上一页</a></li>
+                            <!--当前页背景色为蓝色-->
+                            <li v-for="index in indexs"  v-bind:class="{ 'active': cur == index}">
+                                <a v-on:click="btnClick(index),subArr()">{{ index }}</a>
+                            </li>
+                            <li v-if="cur<all"><a v-on:click="cur++,pageClick(),subArr()">下一页</a></li>
+                            <li v-if="cur == all"><a class="banclick">下一页</a></li>
+                            <li v-if="cur<all"><a v-on:click="cur=all,pageClick(),subArr()">尾页</a></li>
+                            <li v-if="cur == all"><a class="banclick">尾页</a></li>
+                            <li><a>共<i>{{all}}</i>页</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div role="dialog" class="modal fade bs-example-modal-sm" id="layer">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ '确认删除么？'}} </h4>
+                    </div>
+                    <!--                    <div class="modal-body text-right" v-if="!isBatch">-->
+                    <!--                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>-->
+                    <!--                        <button data-dismiss="modal" class="btn btn-danger btn-sm" onclick="hideWindow()" @click="del(0)">确认</button>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="modal-body text-right" v-if="isBatch && isDeal.length!=0">-->
+                    <!--                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>-->
+                    <!--                        <button data-dismiss="modal" class="btn btn-danger btn-sm" onclick="hideWindow()" @click="del(1)">确认</button>-->
+                    <!--                    </div>-->
+                    <div class="modal-body text-right">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" onclick="hideWindow()" @click="del()">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--悬浮窗口-->
+        <div id="window" class="window_css" style="background-color: white">
+            <div class="head">
+                <span style="font-size: 1.2em;font-weight: bold ;margin-left: 5%;color: white" >问题信息</span>
+                <a href="javascript:void(0)" onclick="hideWindow()">
+                    <i class="fas fa-times" style="font-size: 2em;position:absolute;right: 7%;color: white"></i>
+                </a>
+            </div>
+            <div class="table-responsive" style="margin-top: 5%">
+                <h5 style="font-weight: bold">问题信息:</h5>
+                <table width="100%" class="table table-striped table-sm" v-if="QuestionNow!=-1">
+
+                    <tbody>
+                    <tr>
+                        <td>问题ID:{{QuestionInfoList[QuestionNow].id}}</td>
+                        <td>科目:{{QuestionInfoList[QuestionNow].course.name}}</td>
+                        <td>问题类别:{{QuestionInfoList[QuestionNow].type.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>教师ID:{{QuestionInfoList[QuestionNow].teacherId}}</td>
+                        <td>教师工号:{{QuestionInfoList[QuestionNow].teacher.teacherNum}}</td>
+                        <td>教师姓名:{{QuestionInfoList[QuestionNow].teacher.name}}</td>
+                    </tr>
+
+                    <tr>
+                        <td><h6 style="font-weight: bold">问题标题:</h6></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="33%" style="word-break : break-all; ">
+                            {{QuestionInfoList[QuestionNow].title}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td><h6 style="font-weight: bold">问题内容:</h6></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="33%" style="word-break : break-all; ">
+                            {{QuestionInfoList[QuestionNow].content}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr v-if="QuestionInfoList[QuestionNow].type.name=='单项选择题'||QuestionInfoList[QuestionNow].type.name=='多项选择题'">
+                        <td><strong>选项1:</strong> {{QuestionInfoList[QuestionNow].optionList[0].content}}</td>
+                        <td><strong>选项2:</strong> {{QuestionInfoList[QuestionNow].optionList[1].content}}</td>
+                        <td><strong>选项3:</strong> {{QuestionInfoList[QuestionNow].optionList[2].content}}</td>
+                    </tr>
+                    <tr v-if="QuestionInfoList[QuestionNow].type.name=='单项选择题'||QuestionInfoList[QuestionNow].type.name=='多项选择题'">
+                        <td><strong>选项4:</strong> {{QuestionInfoList[QuestionNow].optionList[3].content}}</td>
+                        <td></td>
+                        <td><strong>正确答案:</strong><span v-for="(option,i) in QuestionInfoList[QuestionNow].optionList" v-if="option.truth"> 选项{{i+1}}</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><h6 style="font-weight: bold">问题解析:</h6></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="33%" style="word-break : break-all; ">
+                                {{QuestionInfoList[QuestionNow].refAnswer}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;&nbsp;&nbsp;
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#layer">删除</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-dark" data-toggle="modal" onclick="hideWindow()">关闭</button>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--出现悬浮窗口后,背景变暗-->
+        <div id="shadow" class="shadow_css"></div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script>
+    /*当点击调用此方法后,将悬浮窗口显示出来,背景变暗*/
+    function displayWindow() {
+        console.log("displaywindow方法");
+        /*悬浮窗口的显示,需要将display变成block*/
+        document.getElementById("window").style.display = "block";
+        /*将背景变暗*/
+        document.getElementById("shadow").style.display = "block";
+    }
+
+    /*当点击调用此方法,将悬浮窗口和背景全部隐藏*/
+    function hideWindow() {
+        document.getElementById("window").style.display = "none";
+        document.getElementById("shadow").style.display = "none";
+    }
+
+    let adminQuestion=new Vue({
+        el:"#adminQuestion",
+        data:{
+            all: 1, //总页数
+            cur: 1,//当前页码
+            now:-1,//当前索引
+            QuestionNow:-1,
+            teacherNow:-1,
+            teacherNowInfo:{},
+            isBatch:false,
+            curAll:false,
+            QuestionInfoList:[],//问题信息
+            isDeal:[],//是否被选中
+        },
+        watch: {
+            cur: function(oldValue , newValue){
+                console.log(arguments);
+            }
+        },
+        methods:{
+            updateQuestion: function(now){
+                now.QuestionNum = $("input[id='teaNum']").val();
+                now.name = $("input[id='teaName']").val();
+                this.update(now);
+            },
+            update: function(now){
+                $.ajax({
+                    url: "../admin/updateQuestion",
+                    type: "POST",
+                    data:{
+                        id: now.id,
+                        name: now.name,
+                        QuestionNum: now.QuestionNum
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.code === 0) {
+                            alert("修改成功");
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            reSetQuestion: function(id){
+                $.ajax({
+                    url: "../admin/restQuestionPwd",
+                    type: "POST",
+                    data:{
+                        id: id
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.code === 0) {
+                            alert("重置成功");
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            check: function(i){
+                $.ajax({
+                    url: "../admin/getTeacherById",
+                    type: "GET",
+                    data:{
+                        teacherNum: i
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.code === 0) {
+                            adminQuestion.teacherNowInfo = result.data;
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            chooseAll:function(type){
+                this.isDeal.splice(0,this.isDeal.length);
+                if(type===0)
+                {
+                    for(let i=0;i<this.QuestionInfoList.length;i++)
+                    {
+                        this.isDeal[i]=1;
+                    }
+                }
+                if(type===1)
+                {
+                    for(let i=0;i<this.QuestionInfoList.length;i++)
+                    {
+                        this.isDeal[i]=0;
+                    }
+                }
+                console.log("chooseAll的长度为："+this.isDeal.length);
+            },
+            ifDeal:function(){
+                for(let i=0;i<this.isDeal.length;i++)
+                {
+                    if(this.isDeal[i]==1) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            isAll:function(){
+                console.log("函数isAll:");
+                let i=0;
+                for(i=0;i<this.QuestionInfoList.length;i++)
+                {
+                    if(this.isDeal[i] === 0) {
+                        this.curAll = false;
+                        console.log("false");
+                        break;
+                    }
+                }
+                if(i === this.QuestionInfoList.length)
+                    this.curAll=true;
+
+            },
+            outDeal:function(){
+                console.log("长度为:"+this.isDeal.length+" outDeal:");
+                let i=0;
+                for(i=0;i<this.isDeal.length;i++)
+                {
+                    console.log(this.isDeal[i]+" ");
+                }
+            },
+            searchQuestion: function(){
+                let id = $("input[id='searcher']").val();
+                if($("input[id='searcher']").val()=='')
+                    return;
+                else
+                    this.search(id);
+            },
+            search: function(id){
+                $.ajax({
+                    url: "../admin/getQuestion",
+                    type: "GET",
+                    data:{
+                        id: id
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.code === 0) {
+                            adminQuestion.QuestionInfoList.splice(0,adminQuestion.QuestionInfoList.length);
+                            adminQuestion.QuestionInfoList.push(result.data);
+                            adminQuestion.all = 1;
+                            adminQuestion.chooseAll(1);
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            logout:function () {
+                $.ajax({
+                    url: "../admin/logout",
+                    type: "POST",
+                    data:{},
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.code === 0) {
+                            location.href = "login.html";
+                        }
+                    },
+                    error:function (request,status,error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            isLogin:function(){
+                $.ajax({
+                    url: "../admin/isLogin",
+                    type: "GET",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 1) {
+                            location.href="login.html";
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            del:function(){
+                let delList = [];
+                let i;
+                for(i=0;i<adminQuestion.isDeal.length;i++)
+                {
+                    if(adminQuestion.isDeal[i]==1)
+                    {
+                        delList.push(adminQuestion.QuestionInfoList[i].id);
+                    }
+                }
+                adminQuestion.delQuestion(delList);
+            },
+            delQuestion:function(QuestionIds){
+                $.ajax({
+                    url: "../admin/deleteQuestions",
+                    type: "DELETE",
+                    data: {
+                        questionIds:JSON.stringify(QuestionIds)
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            adminQuestion.getPageQuestion(adminQuestion.cur,15);
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            getPageQuestion: function(pageNum,pageSize){
+                $.ajax({
+                    url: "../admin/listQuestion",
+                    type: "GET",
+                    data: {
+                        pageNum:pageNum,
+                        pageSize:pageSize
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 0) {
+                            adminQuestion.QuestionInfoList = result.data.list;
+                            adminQuestion.all = result.data.pages;
+                            adminQuestion.chooseAll(1);
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            // page: function(){
+            //     adminQuestion.all = Math.ceil(adminQuestion.reportInfoList.length/15) || 1;
+            // },
+            btnClick: function(data){
+                if(data != this.cur){
+                    this.cur = data;
+                }
+            },
+            pageClick: function(){
+                console.log('现在在'+this.cur+'页');
+            },
+            subArr() {
+                console.log("subArr");
+                this.getPageQuestion(this.cur,15);
+                return this.QuestionInfoList;
+            }
+        },
+        computed: {
+            indexs: function(){
+                var left = 1;
+                var right = this.all;
+                var ar = [];
+                if(this.all>= 5){
+                    //这里最大范围从3到6，如果到达7，那么下边加2变成9，已经超过最大的范围值
+                    if(this.cur > 3 && this.cur < this.all-1){
+                        //以4为参考基准，左面加2右边加2
+                        left = this.cur - 2
+                        right = this.cur + 2
+                    }else{
+                        if(this.cur<=3){
+                            left = 1
+                            right = 5
+                        }else{
+                            right = this.all
+                            left = this.all -4
+                        }
+                    }
+                }
+                while (left <= right){
+                    ar.push(left)
+                    left ++
+                }
+                console.log(ar);
+                return ar
+            },
+        },
+        mounted:function () {
+            this.isLogin();
+            this.getPageQuestion(this.cur,15);
+        }
+    });
+    (function () {
+        'use strict'
+
+        feather.replace()
+
+        // Graphs
+        var ctx = document.getElementById('myChart')
+        // eslint-disable-next-line no-unused-vars
+
+    }())
+</script>
+</body>
+</html>

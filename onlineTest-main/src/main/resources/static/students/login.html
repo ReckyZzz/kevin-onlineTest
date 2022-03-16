@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>学生登录</title>
+    <!-- Bootstrap core CSS -->
+    <link href="../css/administrators/login.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://lib.baomitu.com/font-awesome/5.11.2/css/all.min.css">
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <style>
+        .input{
+            width: 60%;
+            margin-left: 20%;
+        }
+        .errorMessage{
+            text-align: left;
+            font-size: 0.8em;
+            color: red;
+        }
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .space{
+            margin-top: 3%;
+        }
+    </style>
+</head>
+<body class="text-center">
+<div id="login" style="margin-left: 40%;width:20%;">
+    <div id="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{alertMsg.head}}</strong>{{alertMsg.body}}
+        <button type="button" class="close"  aria-label="Close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <img class="mb-4" src="../img/Admin.png" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">学生登录</h1>
+    <label for="accountNum" class="sr-only">Admin Account</label>
+    <input type="text" id="accountNum" class="form-control input space" placeholder="请输入您的账号">
+    <label for="password" class="sr-only" >Password</label>
+    <input type="password" id="password" class="form-control input"placeholder="请输入您的密码" maxlength="20" style="margin-top: 1%">
+    <button class="btn btn-lg btn-primary btn-block input"  @click="validator()"  id="loginBut1" style="margin-top: 1%">登录</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2020-2021</p>
+</div>
+<script type="text/javascript">
+    let login=new Vue({
+        el:"#login",
+        data:{
+            isRmb:false,
+            accountNumError:false,
+            accountNumErrorMsg:"",
+            passwordError:false,
+            passwordErrorMsg:"",
+            alertMsg:{head:"",body:""},
+        },
+        methods:{
+            loginByPassword:function (account,password) {
+                $.ajax({
+                    url:"../student/login",
+                    type:"POST",
+                    data:{
+                        studentNum:account,
+                        password:password,
+                    },
+                    dataType:"json",
+                    success:function (result) {
+                        if (result.code === 0) {
+                            login.alertMsg.head = "登录成功";
+                            login.alertMsg.body = "登录成功";
+                            $("#alert").slideDown();
+                            localStorage.setItem("userName",result.data.name);
+                            location.href = "index.html";
+                        } else if (result.code === 1){
+                            login.alertMsg.head = "登录失败,";
+                            login.alertMsg.body = "账号或密码错误";
+                            $("#alert").slideDown();
+                        }
+                    },
+                    error:function (e) {
+                        alert("服务器异常");
+                    }
+                });
+            },
+            isLogin:function(){
+                $.ajax({
+                    url: "../student/isLogin",
+                    type: "GET",
+                    data: {},
+                    dataType: "json",
+                    success: function (result) {
+                        if(result.code === 0){
+                            location.href="index.html";
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("系统异常！");
+                        console.log(request.status);
+                        console.log(request.readyState);
+                        console.log(status);
+                    }
+                });
+            },
+            validator:function () {
+                let accountNum = $("#accountNum").val();
+                let password = $("#password").val();
+                if (password.length === 0) {
+                    this.passwordError = true;
+                    login.alertMsg.head = "登录失败";
+                    login.alertMsg.body = "密码为空";
+                    $("#alert").slideDown();
+                } else {
+                    this.passwordError = false;
+                }
+                if (!this.accountNumError && !this.passwordError) {
+                    this.loginByPassword(accountNum,password);
+                }
+            },
+            back:function () {
+                history.go(-1);
+            },
+            closeAlert:function () {
+                $("#alert").slideUp();
+            }
+        },
+        mounted:function () {
+            this.isLogin();
+        }
+    });
+</script>
+</body>
+</html>
